@@ -1,0 +1,14 @@
+.env
+config.yaml
+data/
+.venv/
+.venv-*/
+wxauto_logs/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/

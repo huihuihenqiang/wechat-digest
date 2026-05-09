@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wechat-digest"
+version = "0.1.0"
+description = "Local WeChat group daily digest assistant using wxauto4 and an OpenAI-compatible API."
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+dependencies = [
+  "PyYAML>=6.0.1",
+  "tzdata>=2024.1; platform_system == 'Windows'",
+  "wxauto4; platform_system == 'Windows' and python_version < '3.13'",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+
+[project.scripts]
+wechat-digest = "wechat_digest.cli:main"
+check-wechat = "wechat_digest.cli:check_wechat_entry"
+send-test = "wechat_digest.cli:send_test_entry"
+digest-now = "wechat_digest.cli:digest_now_entry"
+wechat-digest-run = "wechat_digest.cli:run_entry"
+
+[tool.setuptools.packages.find]
+where = ["src"]

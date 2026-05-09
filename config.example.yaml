@@ -1,0 +1,25 @@
+# Copy this file to config.yaml, then change group names and receiver.
+
+wechat:
+  groups:
+    - "需要总结的微信群名"
+  recipient: "文件传输助手"
+  poll_interval_seconds: 60
+  message_fetch_limit: 80
+  message_chunk_size: 1800
+
+digest:
+  time: "22:00"
+  timezone: "Asia/Hong_Kong"
+  retention_days: 30
+
+storage:
+  path: "data/wechat_digest.sqlite3"
+
+llm:
+  base_url: "${OPENAI_BASE_URL}"
+  api_key: "${OPENAI_API_KEY}"
+  model: "${OPENAI_MODEL}"
+  timeout_seconds: 60
+  max_input_messages: 500
+  temperature: 0.2
