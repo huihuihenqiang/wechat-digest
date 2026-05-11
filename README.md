@@ -1,6 +1,23 @@
 # 微信群 AI 日报助手 —— 你的微信群，终于有了 AI 大脑
 
-> **OpenClaw 原生插件 | 本地运行 | 隐私优先 | 日报 + 记忆双引擎**
+<p align=”center”>
+  <img src=”https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue?logo=python&logoColor=white” alt=”Python”>
+  <img src=”https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white” alt=”Platform”>
+  <img src=”https://img.shields.io/badge/plugin-OpenClaw-8A2BE2?logo=robotframework&logoColor=white” alt=”OpenClaw Plugin”>
+  <img src=”https://img.shields.io/badge/LLM-OpenAI%20%7C%20兼容接口-412991?logo=openai&logoColor=white” alt=”LLM”>
+  <img src=”https://img.shields.io/badge/license-MIT-green?logo=github&logoColor=white” alt=”License”>
+  <img src=”https://img.shields.io/badge/status-active-success?logo=githubactions&logoColor=white” alt=”Status”>
+</p>
+
+<p align=”center”>
+  <b>OpenClaw 原生插件 | 本地运行 | 隐私优先 | 日报 × 记忆 × 搜索 三引擎</b>
+</p>
+
+<p align=”center”>
+  <img src=”image/1.jpg” alt=”手机微信 wd 命令” width=”45%”>
+  &nbsp;&nbsp;
+  <img src=”image/2.jpg” alt=”AI 日报效果” width=”45%”>
+</p>
 
 日常使用请优先看 [USAGE.md](USAGE.md)。那里把入口收敛成”日常自动模式”和”一次性总结模式”，并列出了启动、退出、诊断和 OpenClaw 回发方式。
 
