@@ -1,35 +1,35 @@
-# 微信群 AI 日报助手 —— 你的微信群，终于有了 AI 大脑
+﻿# 微信群 AI 日报助手 —— 你的微信群，终于有了 AI 大脑
 
-<p align=”center”>
-  <img src=”https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue?logo=python&logoColor=white” alt=”Python”>
-  <img src=”https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white” alt=”Platform”>
-  <img src=”https://img.shields.io/badge/plugin-OpenClaw-8A2BE2?logo=robotframework&logoColor=white” alt=”OpenClaw Plugin”>
-  <img src=”https://img.shields.io/badge/LLM-OpenAI%20%7C%20兼容接口-412991?logo=openai&logoColor=white” alt=”LLM”>
-  <img src=”https://img.shields.io/badge/license-MIT-green?logo=github&logoColor=white” alt=”License”>
-  <img src=”https://img.shields.io/badge/status-active-success?logo=githubactions&logoColor=white” alt=”Status”>
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue?logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white" alt="Platform">
+  <img src="https://img.shields.io/badge/plugin-OpenClaw-8A2BE2?logo=robotframework&logoColor=white" alt="OpenClaw Plugin">
+  <img src="https://img.shields.io/badge/LLM-OpenAI%20%7C%20兼容接口-412991?logo=openai&logoColor=white" alt="LLM">
+  <img src="https://img.shields.io/badge/license-MIT-green?logo=github&logoColor=white" alt="License">
+  <img src="https://img.shields.io/badge/status-active-success?logo=githubactions&logoColor=white" alt="Status">
 </p>
 
-<p align=”center”>
+<p align="center">
   <b>OpenClaw 原生插件 | 本地运行 | 隐私优先 | 日报 × 记忆 × 搜索 三引擎</b>
 </p>
 
-<p align=”center”>
-  <img src=”image/1.jpg” alt=”手机微信 wd 命令” width=”45%”>
+<p align="center">
+  <img src="image/1.jpg" alt="手机微信 wd 命令" width="45%">
   &nbsp;&nbsp;
-  <img src=”image/2.jpg” alt=”AI 日报效果” width=”45%”>
+  <img src="image/2.jpg" alt="AI 日报效果" width="45%">
 </p>
 
-日常使用请优先看 [USAGE.md](USAGE.md)。那里把入口收敛成”日常自动模式”和”一次性总结模式”，并列出了启动、退出、诊断和 OpenClaw 回发方式。
+日常使用请优先看 [USAGE.md](USAGE.md)。那里把入口收敛成"日常自动模式"和"一次性总结模式"，并列出了启动、退出、诊断和 OpenClaw 回发方式。
 
 ---
 
 ## 为什么你需要这个项目？
 
-微信承载了中国人的工作和生活。社群运营在微信、项目沟通在微信、课程通知在微信、招聘机会还在微信。但微信从来不为群聊提供任何形式的总结、搜索或沉淀能力——消息像潮水一样涌来又消失，重要通知被刷屏淹没，待办事项散落在”收到”和表情包之间，你只能一遍遍往上翻。
+微信承载了中国人的工作和生活。社群运营在微信、项目沟通在微信、课程通知在微信、招聘机会还在微信。但微信从来不为群聊提供任何形式的总结、搜索或沉淀能力——消息像潮水一样涌来又消失，重要通知被刷屏淹没，待办事项散落在"收到"和表情包之间，你只能一遍遍往上翻。
 
 飞书有飞书智能伙伴，钉钉有钉钉 AI 助理，Slack 有 Thread Summary，Discord 有 Conversation Summary。微信呢？什么也没有。直到现在。
 
-**wechat-digest = 桌面微信自动化 × OpenClaw 私聊通道 × OpenAI 兼容模型 × 本地数据库**。四个组件拼在一起，把微信群聊从一个”只能刷不能管”的黑洞，变成一个可以**回查、提炼、日报推送到手机**的情报系统。
+**wechat-digest = 桌面微信自动化 × OpenClaw 私聊通道 × OpenAI 兼容模型 × 本地数据库**。四个组件拼在一起，把微信群聊从一个"只能刷不能管"的黑洞，变成一个可以**回查、提炼、日报推送到手机**的情报系统。
 
 ## 它到底能干什么？
 
@@ -38,7 +38,7 @@
 核心能力：
 
 - **手机私聊发命令，电脑自动执行**：在微信里给机器人发 `wd 日报 昨天`，电脑上自动滚动群聊、采集消息、调用 AI 生成日报、把结果私发回你手机。全程不碰群聊，不在群里回任何消息。
-- **日报不是”聊天记录摘要”，是”情报简报”**：强调可行动、可追踪、可验证。包含关键通知、机会资源、决策结论、待办事项、风险提醒、重要原话引用——每一条都能追溯到具体的群、人和消息 ID。
+- **日报不是"聊天记录摘要"，是"情报简报"**：强调可行动、可追踪、可验证。包含关键通知、机会资源、决策结论、待办事项、风险提醒、重要原话引用——每一条都能追溯到具体的群、人和消息 ID。
 - **搜索不是 grep，是上下文感知**：`wd 查 报名` 不仅返回匹配消息，还自动带出前后文。`wd 原文 m123` 展开指定消息的完整对话上下文。
 - **记忆引擎跨越单日**：除了日报，`wd 记忆` 会基于当天消息提炼结构化记忆：重要事项、长期线索、待办、人物关系、潜在风险。长期记忆跨天沉淀，形成群聊的知识图谱。
 - **定时自动推送**：`wd 定时 22:00` 开启每晚自动日报。到点自动采集、生成、发到你手机。你不用惦记，日报准时到。
@@ -49,7 +49,7 @@
 ## 项目亮点
 
 - **本地优先**：聊天消息默认只存放在本机 SQLite 数据库中，仓库不会包含你的真实配置、日志或消息数据。
-- **高信噪比日报**：提示词强调“可行动、可追踪、可验证”，不是简单复述聊天记录。
+- **高信噪比日报**：提示词强调"可行动、可追踪、可验证"，不是简单复述聊天记录。
 - **结构化输出**：日报包含今日摘要、关键信息、机会与资源、决策与结论、待办、风险和重要原话。
 - **可托管运行**：支持持续采集、定时日报、手动生成、dry-run 预览，适合接入 Windows 任务计划程序。
 - **OpenAI 兼容接口**：可使用 OpenAI 或其他兼容 `/chat/completions` 的模型服务。
@@ -321,7 +321,7 @@ wechat-digest run
 模型会尽量输出下面这些部分：
 
 - **今日摘要**：3 到 6 条最重要的变化、机会、风险和待办。
-- **关键信息**：按“群名 / 发送者：事项 [m数字]”记录可追踪信息。
+- **关键信息**：按"群名 / 发送者：事项 [m数字]"记录可追踪信息。
 - **机会与资源**：招聘、活动、报名、资料、链接、求助等。
 - **决策与结论**：只记录群里明确形成的决定。
 - **待办**：事项、负责人和截止时间。
@@ -368,7 +368,7 @@ rg -n -i "api[_-]?key|secret|token|password|bearer|sk-" .
 - 每天需要追踪多个微信群，但不想反复翻聊天记录。
 - 希望把通知、资源、报名入口、任务和风险统一沉淀。
 - 需要一份能快速回看、能转发、能归档的中文日报。
-- 想要保留“本地采集、本地存储、主动发送”的可控工作流。
+- 想要保留"本地采集、本地存储、主动发送"的可控工作流。
 
 ## 免责声明
 
