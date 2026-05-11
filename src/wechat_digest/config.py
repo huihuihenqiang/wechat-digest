@@ -20,10 +20,20 @@ class WeChatConfig:
 
 
 @dataclass(frozen=True)
+class CollectionConfig:
+    mode: str = "backfill"
+    backfill_until: str = "previous_day_start"
+    backfill_fetch_limit: int = 1000
+    backfill_max_scrolls: int = 20
+    scroll_pause_seconds: float = 0.02
+
+
+@dataclass(frozen=True)
 class DigestConfig:
     time: str = "23:00"
     timezone: str = "Asia/Hong_Kong"
     retention_days: int = 30
+    prompt_path: str = "prompts/digest.zh.md"
 
 
 @dataclass(frozen=True)
@@ -42,11 +52,27 @@ class LLMConfig:
 
 
 @dataclass(frozen=True)
+class OpenClawConfig:
+    enabled: bool = False
+    channel: str = "openclaw-weixin"
+    transport: str = "mcp"
+    command: str = "openclaw"
+    args: tuple[str, ...] = ("mcp", "serve")
+    poll_timeout_seconds: int = 30
+    request_timeout_seconds: int = 90
+    account_id: str = ""
+    base_dir: str = ""
+    sync_path: str = "data/openclaw-weixin-direct-sync.json"
+
+
+@dataclass(frozen=True)
 class AppConfig:
     wechat: WeChatConfig
+    collection: CollectionConfig
     digest: DigestConfig
     storage: StorageConfig
     llm: LLMConfig
+    openclaw: OpenClawConfig
 
 
 class ConfigError(ValueError):
@@ -81,9 +107,11 @@ def load_config(path: str | Path = "config.yaml", env_path: str | Path = ".env")
 
 def config_from_mapping(data: dict[str, Any]) -> AppConfig:
     wechat_data = _mapping(data.get("wechat"), "wechat")
+    collection_data = _mapping(data.get("collection", {}), "collection")
     digest_data = _mapping(data.get("digest", {}), "digest")
     storage_data = _mapping(data.get("storage", {}), "storage")
     llm_data = _mapping(data.get("llm", {}), "llm")
+    openclaw_data = _mapping(data.get("openclaw", {}), "openclaw")
 
     groups = [str(item).strip() for item in wechat_data.get("groups", []) if str(item).strip()]
     if not groups:
@@ -101,10 +129,24 @@ def config_from_mapping(data: dict[str, Any]) -> AppConfig:
             message_fetch_limit=_positive_int(wechat_data.get("message_fetch_limit", 80), "wechat.message_fetch_limit"),
             message_chunk_size=_positive_int(wechat_data.get("message_chunk_size", 1800), "wechat.message_chunk_size"),
         ),
+        collection=CollectionConfig(
+            mode=str(collection_data.get("mode", "backfill")),
+            backfill_until=str(collection_data.get("backfill_until", "previous_day_start")),
+            backfill_fetch_limit=_positive_int(
+                collection_data.get("backfill_fetch_limit", 500),
+                "collection.backfill_fetch_limit",
+            ),
+            backfill_max_scrolls=_positive_int(
+                collection_data.get("backfill_max_scrolls", 20),
+                "collection.backfill_max_scrolls",
+            ),
+            scroll_pause_seconds=float(collection_data.get("scroll_pause_seconds", 0.02)),
+        ),
         digest=DigestConfig(
             time=str(digest_data.get("time", "23:00")),
             timezone=str(digest_data.get("timezone", "Asia/Hong_Kong")),
             retention_days=_positive_int(digest_data.get("retention_days", 30), "digest.retention_days"),
+            prompt_path=str(digest_data.get("prompt_path", "prompts/digest.zh.md")),
         ),
         storage=StorageConfig(path=str(storage_data.get("path", "data/wechat_digest.sqlite3"))),
         llm=LLMConfig(
@@ -114,6 +156,24 @@ def config_from_mapping(data: dict[str, Any]) -> AppConfig:
             timeout_seconds=_positive_int(llm_data.get("timeout_seconds", 60), "llm.timeout_seconds"),
             max_input_messages=_positive_int(llm_data.get("max_input_messages", 300), "llm.max_input_messages"),
             temperature=float(llm_data.get("temperature", 0.2)),
+        ),
+        openclaw=OpenClawConfig(
+            enabled=_bool(openclaw_data.get("enabled", False)),
+            channel=str(openclaw_data.get("channel", "openclaw-weixin")),
+            transport=str(openclaw_data.get("transport", "mcp")),
+            command=str(openclaw_data.get("command", "openclaw")),
+            args=_string_tuple(openclaw_data.get("args", ["mcp", "serve"])),
+            poll_timeout_seconds=_positive_int(
+                openclaw_data.get("poll_timeout_seconds", 30),
+                "openclaw.poll_timeout_seconds",
+            ),
+            request_timeout_seconds=_positive_int(
+                openclaw_data.get("request_timeout_seconds", 90),
+                "openclaw.request_timeout_seconds",
+            ),
+            account_id=str(openclaw_data.get("account_id", "")),
+            base_dir=str(openclaw_data.get("base_dir", "")),
+            sync_path=str(openclaw_data.get("sync_path", "data/openclaw-weixin-direct-sync.json")),
         ),
     )
 
@@ -155,6 +215,24 @@ def _positive_int(value: Any, name: str) -> int:
     if number <= 0:
         raise ConfigError(f"{name} must be positive")
     return number
+
+
+def _bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _string_tuple(value: Any) -> tuple[str, ...]:
+    if value in (None, ""):
+        return ()
+    if isinstance(value, str):
+        return tuple(item for item in value.split() if item)
+    if isinstance(value, (list, tuple)):
+        return tuple(str(item) for item in value)
+    return (str(value),)
 
 
 def _expand_env(value: Any) -> Any:

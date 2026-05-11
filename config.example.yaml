@@ -8,6 +8,13 @@ wechat:
   message_fetch_limit: 80
   message_chunk_size: 1800
 
+collection:
+  mode: "backfill"
+  backfill_until: "previous_day_start"
+  backfill_fetch_limit: 500
+  backfill_max_scrolls: 20
+  scroll_pause_seconds: 0.02
+
 digest:
   time: "22:00"
   timezone: "Asia/Hong_Kong"
@@ -23,3 +30,19 @@ llm:
   timeout_seconds: 60
   max_input_messages: 500
   temperature: 0.2
+
+openclaw:
+  enabled: true
+  channel: "openclaw-weixin"
+  # Legacy fallback for `wechat-digest assistant`.
+  # The recommended mode is OpenClaw Gateway + openclaw-plugin/wechat-digest.
+  transport: "weixin-direct"
+  account_id: ""
+  base_dir: ""
+  sync_path: "data/openclaw-weixin-direct-sync.json"
+  command: "openclaw"
+  args:
+    - "mcp"
+    - "serve"
+  poll_timeout_seconds: 30
+  request_timeout_seconds: 90

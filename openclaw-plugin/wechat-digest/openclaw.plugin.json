@@ -1,0 +1,66 @@
+{
+  "id": "wechat-digest",
+  "name": "WeChat Digest Tools",
+  "description": "Expose the local WeChat digest project to OpenClaw as fixed, one-shot tools.",
+  "kind": "tool",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": [
+      "tool",
+      "hook"
+    ]
+  },
+  "contracts": {
+    "tools": [
+      "wechat_digest_command",
+      "wechat_digest_status",
+      "wechat_digest_backfill",
+      "wechat_digest_search",
+      "wechat_digest_context"
+    ]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "projectRoot": {
+        "type": "string",
+        "description": "Absolute path to the wechat-digest project root. Defaults to the linked plugin's grandparent directory."
+      },
+      "cliPath": {
+        "type": "string",
+        "description": "Optional path to wechat-digest executable. Defaults to .venv/Scripts/wechat-digest.exe on Windows."
+      },
+      "configPath": {
+        "type": "string",
+        "description": "Project config path. Defaults to config.yaml under projectRoot."
+      },
+      "envPath": {
+        "type": "string",
+        "description": "Project .env path. Defaults to .env under projectRoot."
+      },
+      "channel": {
+        "type": "string",
+        "description": "Only claim wd commands from this OpenClaw channel. Empty means any channel."
+      },
+      "prefix": {
+        "type": "string",
+        "description": "Command prefix to claim. Defaults to wd."
+      },
+      "allowGroupCommands": {
+        "type": "boolean",
+        "description": "Whether wd commands in group chats should be claimed. Defaults to false."
+      },
+      "maxReplyChars": {
+        "type": "integer",
+        "minimum": 500,
+        "description": "Maximum characters returned to WeChat/OpenClaw. Defaults to 6000."
+      },
+      "timeoutMs": {
+        "type": "integer",
+        "minimum": 10000,
+        "description": "Timeout for each local CLI execution. Defaults to 600000."
+      }
+    }
+  }
+}

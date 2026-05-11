@@ -19,8 +19,13 @@ class ConfigTests(unittest.TestCase):
 
         self.assertEqual(config.wechat.groups, ["群A"])
         self.assertEqual(config.wechat.recipient, "文件传输助手")
+        self.assertEqual(config.collection.mode, "backfill")
         self.assertEqual(config.digest.time, "23:00")
         self.assertEqual(config.llm.model, "model")
+        self.assertFalse(config.openclaw.enabled)
+        self.assertEqual(config.openclaw.transport, "mcp")
+        self.assertEqual(config.openclaw.request_timeout_seconds, 90)
+        self.assertEqual(config.openclaw.sync_path, "data/openclaw-weixin-direct-sync.json")
 
     def test_load_config_expands_env(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

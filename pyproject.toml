@@ -24,7 +24,11 @@ wechat-digest = "wechat_digest.cli:main"
 check-wechat = "wechat_digest.cli:check_wechat_entry"
 send-test = "wechat_digest.cli:send_test_entry"
 digest-now = "wechat_digest.cli:digest_now_entry"
+digest-backfill = "wechat_digest.cli:digest_backfill_entry"
+wechat-fetch-once = "wechat_digest.cli:fetch_once_entry"
+wechat-assistant = "wechat_digest.cli:assistant_entry"
 wechat-digest-run = "wechat_digest.cli:run_entry"
+scheduled-digest = "wechat_digest.cli:scheduled_digest_entry"
 
 [tool.setuptools.packages.find]
 where = ["src"]

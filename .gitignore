@@ -1,9 +1,11 @@
 .env
 config.yaml
 data/
+.claude/
 .venv/
 .venv-*/
 wxauto_logs/
+logs/
 __pycache__/
 *.py[cod]
 .pytest_cache/

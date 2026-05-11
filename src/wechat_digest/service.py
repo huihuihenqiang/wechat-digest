@@ -7,7 +7,7 @@ import time as time_module
 from .config import AppConfig
 from .digest import DigestError, DigestGenerator, fallback_digest, split_message
 from .storage import DigestStore
-from .timeutils import app_timezone, day_window, should_run_digest
+from .timeutils import day_window
 from .wechat import WeChatClient
 
 
@@ -18,6 +18,7 @@ class DigestResult:
     message_count: int
     sent: bool
     dry_run: bool
+    scope: str = ""
 
 
 class DigestService:
@@ -33,9 +34,9 @@ class DigestService:
         self.wechat_client = wechat_client
         self.digest_generator = digest_generator
 
-    def collect_once(self) -> int:
+    def collect_once(self, groups: list[str] | None = None) -> int:
         inserted = 0
-        for group_name in self.config.wechat.groups:
+        for group_name in groups or self.config.wechat.groups:
             messages = self.wechat_client.fetch_recent_messages(
                 group_name,
                 limit=self.config.wechat.message_fetch_limit,
@@ -49,9 +50,13 @@ class DigestService:
         target_date: date,
         dry_run: bool = False,
         allow_fallback: bool = False,
+        send: bool = True,
+        groups: list[str] | None = None,
     ) -> DigestResult:
+        target_groups = groups or self.config.wechat.groups
+        scope = digest_scope(target_groups)
         start, end = day_window(target_date, self.config.digest.timezone)
-        messages = self.store.get_messages(start, end, self.config.wechat.groups)
+        messages = self.store.get_messages(start, end, target_groups)
         try:
             content = self.digest_generator.generate(target_date, messages)
         except DigestError:
@@ -62,25 +67,24 @@ class DigestService:
         sent = False
         digest_date = target_date.isoformat()
         if dry_run:
-            return DigestResult(digest_date, content, len(messages), sent=False, dry_run=True)
+            return DigestResult(digest_date, content, len(messages), sent=False, dry_run=True, scope=scope)
 
-        self.store.save_digest(digest_date, content)
-        for chunk in split_message(content, self.config.wechat.message_chunk_size):
-            self.wechat_client.send_message(self.config.wechat.recipient, chunk)
-        self.store.mark_digest_sent(digest_date, datetime.now(timezone.utc))
-        sent = True
-        return DigestResult(digest_date, content, len(messages), sent=sent, dry_run=False)
+        self.store.save_digest(digest_date, content, scope=scope)
+        if send:
+            for chunk in split_message(content, self.config.wechat.message_chunk_size):
+                self.wechat_client.send_message(self.config.wechat.recipient, chunk)
+            self.store.mark_digest_sent(digest_date, datetime.now(timezone.utc), scope=scope)
+            sent = True
+        return DigestResult(digest_date, content, len(messages), sent=sent, dry_run=False, scope=scope)
 
     def run_forever(self, once: bool = False) -> None:
-        tz = app_timezone(self.config.digest.timezone)
         while True:
             inserted = self.collect_once()
             if once:
                 print(f"Collected {inserted} new messages.")
                 return
-            now = datetime.now(tz)
-            today = now.date()
-            existing = self.store.get_digest(today.isoformat())
-            if should_run_digest(now, self.config.digest.time) and not (existing and existing.sent_at):
-                self.generate_daily_digest(today, dry_run=False)
             time_module.sleep(self.config.wechat.poll_interval_seconds)
+
+
+def digest_scope(groups: list[str] | tuple[str, ...] | None) -> str:
+    return ",".join(group.strip() for group in (groups or []) if group and group.strip())

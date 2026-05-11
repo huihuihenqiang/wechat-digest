@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, time, timedelta, timezone, tzinfo
+import re
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
@@ -36,6 +37,26 @@ def parse_date(value: str | None, tz_name: str) -> date:
     if value:
         return date.fromisoformat(value)
     return datetime.now(app_timezone(tz_name)).date()
+
+
+def parse_flexible_date(value: str | None, tz_name: str, default_to_yesterday: bool = False) -> date:
+    today = datetime.now(app_timezone(tz_name)).date()
+    if not value:
+        return today - timedelta(days=1) if default_to_yesterday else today
+    text = value.strip().lower()
+    if text in {"today", "今天", "今日"}:
+        return today
+    if text in {"yesterday", "昨天", "昨日"}:
+        return today - timedelta(days=1)
+    if text in {"前天"}:
+        return today - timedelta(days=2)
+    match = re.fullmatch(r"(?:前|过去)?(?P<days>\d+)天(?:前)?", text)
+    if match:
+        return today - timedelta(days=int(match.group("days")))
+    match = re.fullmatch(r"-(?P<days>\d+)", text)
+    if match:
+        return today - timedelta(days=int(match.group("days")))
+    return date.fromisoformat(text)
 
 
 def day_window(target_date: date, tz_name: str) -> tuple[datetime, datetime]:
